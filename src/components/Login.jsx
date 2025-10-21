@@ -1,20 +1,51 @@
-import { useState } from "react";
-import "./Login.css";
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import './Login.css';
 
 function Login({ setToken, setView }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const inputStyles = {
+    width: '100%',
+    padding: '8px',
+    color: 'black', 
+    backgroundColor: 'white', 
+    border: '1px solid #ccc', 
+    borderRadius: '4px',
+  };
+
+  const buttonStyles = {
+    width: '100%',
+    padding: '10px',
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  };
+
+  const linkButtonStyles = {
+    background: 'none',
+    border: 'none',
+    color: 'blue',
+    cursor: 'pointer',
+  };
+
+  const errorStyles = {
+    color: 'red',
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
@@ -22,14 +53,18 @@ function Login({ setToken, setView }) {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token);
+        localStorage.setItem('token', data.token);
         setToken(data.token);
       } else {
         setError(data.message);
       }
     } catch (err) {
-      setError("Connection error");
+      setError('Connection error');
     }
+  };
+
+  const handleRegisterClick = () => {
+    setView('register');
   };
 
   return (
@@ -41,7 +76,7 @@ function Login({ setToken, setView }) {
           COURSE PROJECT TITLE: "Augmentation of RGB Image Dataset using SMOTE"
         </h2>
 
-        <div className="title-divider"></div>
+        <div className="title-divider" />
 
         <p className="carried-out">Carried out by</p>
         <p className="student-name">Anshul Dadhich (231IT010)</p>
@@ -53,66 +88,38 @@ function Login({ setToken, setView }) {
       <div className="login-form-container">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "10px" }}>
+          <div style={{ marginBottom: '10px' }}>
             <input
               type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "8px",
-                color: "black", 
-                backgroundColor: "white", 
-                border: "1px solid #ccc", 
-                borderRadius: "4px", 
-              }}
+              style={inputStyles}
             />
           </div>
-          <div style={{ marginBottom: "10px" }}>
+          <div style={{ marginBottom: '10px' }}>
             <input
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{
-                width: "100%",
-                padding: "8px",
-                color: "black", 
-                backgroundColor: "white", 
-                border: "1px solid #ccc", 
-                borderRadius: "4px",
-              }}
+              style={inputStyles}
             />
           </div>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              padding: "10px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-          >
+          {error && <p style={errorStyles}>{error}</p>}
+          <button type="submit" style={buttonStyles}>
             Login
           </button>
         </form>
         <p>
-          Don't have an account?{" "}
+          Don&apos;t have an account?
+          {' '}
           <button
-            onClick={() => setView("register")}
-            style={{
-              background: "none",
-              border: "none",
-              color: "blue",
-              cursor: "pointer",
-            }}
+            type="button"
+            onClick={handleRegisterClick}
+            style={linkButtonStyles}
           >
             Register
           </button>
@@ -121,5 +128,10 @@ function Login({ setToken, setView }) {
     </div>
   );
 }
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired,
+  setView: PropTypes.func.isRequired,
+};
 
 export default Login;

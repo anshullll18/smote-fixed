@@ -1,18 +1,21 @@
+import PropTypes from 'prop-types';
+
 function ParametersSection({ 
   kNeighbour, 
   targetRatio, 
   randomState, 
   fieldErrors, 
-  handleInputChange 
+  handleInputChange,
 }) {
   return (
     <div className="parameters-grid">
       <div className="param-field">
-        <label>
+        <label htmlFor="kNeighbour">
           K Neighbour
           <span className="optional-badge">Optional</span>
         </label>
         <input
+          id="kNeighbour"
           type="number"
           value={kNeighbour}
           onChange={(e) => handleInputChange('kNeighbour', e.target.value)}
@@ -28,11 +31,12 @@ function ParametersSection({
       </div>
 
       <div className="param-field">
-        <label>
+        <label htmlFor="targetRatio">
           Target Ratio
           <span className="optional-badge">Optional</span>
         </label>
         <input
+          id="targetRatio"
           type="number"
           step="0.01"
           value={targetRatio}
@@ -50,11 +54,12 @@ function ParametersSection({
       </div>
 
       <div className="param-field">
-        <label>
+        <label htmlFor="randomState">
           Random State
           <span className="optional-badge">Optional</span>
         </label>
         <input
+          id="randomState"
           type="number"
           value={randomState}
           onChange={(e) => handleInputChange('randomState', e.target.value)}
@@ -70,5 +75,17 @@ function ParametersSection({
     </div>
   );
 }
+
+ParametersSection.propTypes = {
+  kNeighbour: PropTypes.string.isRequired,
+  targetRatio: PropTypes.string.isRequired,
+  randomState: PropTypes.string.isRequired,
+  fieldErrors: PropTypes.shape({
+    kNeighbour: PropTypes.string,
+    targetRatio: PropTypes.string,
+    randomState: PropTypes.string,
+  }).isRequired,
+  handleInputChange: PropTypes.func.isRequired,
+};
 
 export default ParametersSection;

@@ -1,5 +1,9 @@
+import PropTypes from 'prop-types';
+
 function UserInfoCard({ user }) {
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="user-info-card">
@@ -23,5 +27,16 @@ function UserInfoCard({ user }) {
     </div>
   );
 }
+
+UserInfoCard.propTypes = {
+  user: PropTypes.shape({
+    username: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+  }),
+};
+
+UserInfoCard.defaultProps = {
+  user: null,
+};
 
 export default UserInfoCard;

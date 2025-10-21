@@ -8,6 +8,7 @@ export const useFileUpload = () => {
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    
     if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true);
     } else if (e.type === 'dragleave') {
@@ -22,11 +23,15 @@ export const useFileUpload = () => {
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const file = e.dataTransfer.files[0];
+      
       if (file.name.endsWith('.zip')) {
         setZipFile(file);
-        setFieldErrors(prev => ({ ...prev, zipFile: '' }));
+        setFieldErrors((prev) => ({ ...prev, zipFile: '' }));
       } else {
-        setFieldErrors(prev => ({ ...prev, zipFile: 'Only .zip files are allowed' }));
+        setFieldErrors((prev) => ({ 
+          ...prev, 
+          zipFile: 'Only .zip files are allowed',
+        }));
       }
     }
   };
@@ -34,11 +39,15 @@ export const useFileUpload = () => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
       if (file.name.endsWith('.zip')) {
         setZipFile(file);
-        setFieldErrors(prev => ({ ...prev, zipFile: '' }));
+        setFieldErrors((prev) => ({ ...prev, zipFile: '' }));
       } else {
-        setFieldErrors(prev => ({ ...prev, zipFile: 'Only .zip files are allowed' }));
+        setFieldErrors((prev) => ({ 
+          ...prev, 
+          zipFile: 'Only .zip files are allowed',
+        }));
       }
     }
   };
@@ -55,6 +64,6 @@ export const useFileUpload = () => {
     handleDrag,
     handleDrop,
     handleFileChange,
-    clearFile
+    clearFile,
   };
 };

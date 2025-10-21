@@ -1,4 +1,11 @@
+import PropTypes from 'prop-types';
+
 function OutputSection({ outputInfo }) {
+  const placeholderTextStyles = { 
+    fontSize: '0.75rem', 
+    marginTop: '0.5rem',
+  };
+
   return (
     <div className="output-section">
       {outputInfo ? (
@@ -27,11 +34,25 @@ function OutputSection({ outputInfo }) {
       ) : (
         <div className="output-placeholder">
           <p>Output information will appear here after processing</p>
-          <p style={{ fontSize: '0.75rem', marginTop: '0.5rem' }}>Submit the form to see the results</p>
+          <p style={placeholderTextStyles}>Submit the form to see the results</p>
         </div>
       )}
     </div>
   );
 }
+
+OutputSection.propTypes = {
+  outputInfo: PropTypes.shape({
+    filename: PropTypes.string.isRequired,
+    size: PropTypes.string.isRequired,
+    kNeighbour: PropTypes.string.isRequired,
+    targetRatio: PropTypes.string.isRequired,
+    randomState: PropTypes.string.isRequired,
+  }),
+};
+
+OutputSection.defaultProps = {
+  outputInfo: null,
+};
 
 export default OutputSection;

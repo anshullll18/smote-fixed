@@ -1,22 +1,34 @@
+import PropTypes from 'prop-types';
+
 function FileUploadSection({ 
   zipFile, 
   dragActive, 
   fieldErrors, 
   handleDrag, 
   handleDrop, 
-  handleFileChange 
+  handleFileChange,
 }) {
+  const labelStyles = { 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '0.5rem', 
+    fontSize: '0.875rem', 
+    fontWeight: '500', 
+    color: '#374151',
+    marginBottom: '0.5rem',
+  };
+
+  const hiddenInputStyles = { 
+    display: 'none',
+  };
+
+  const handleClick = () => {
+    document.getElementById('fileInput').click();
+  };
+
   return (
     <div>
-      <label style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '0.5rem', 
-        fontSize: '0.875rem', 
-        fontWeight: '500', 
-        color: '#374151',
-        marginBottom: '0.5rem'
-      }}>
+      <label htmlFor="fileInput" style={labelStyles}>
         Upload Dataset
         <span className="required-badge">Required</span>
       </label>
@@ -26,14 +38,21 @@ function FileUploadSection({
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        onClick={() => document.getElementById('fileInput').click()}
+        onClick={handleClick}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleClick();
+          }
+        }}
+        role="button"
+        tabIndex={0}
       >
         <input
           id="fileInput"
           type="file"
           accept=".zip"
           onChange={handleFileChange}
-          style={{ display: 'none' }}
+          style={hiddenInputStyles}
         />
         <div className="upload-content">
           {zipFile ? (
@@ -64,5 +83,23 @@ function FileUploadSection({
     </div>
   );
 }
+
+FileUploadSection.propTypes = {
+  zipFile: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    size: PropTypes.number.isRequired,
+  }),
+  dragActive: PropTypes.bool.isRequired,
+  fieldErrors: PropTypes.shape({
+    zipFile: PropTypes.string,
+  }).isRequired,
+  handleDrag: PropTypes.func.isRequired,
+  handleDrop: PropTypes.func.isRequired,
+  handleFileChange: PropTypes.func.isRequired,
+};
+
+FileUploadSection.defaultProps = {
+  zipFile: null,
+};
 
 export default FileUploadSection;

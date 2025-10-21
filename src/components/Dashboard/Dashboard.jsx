@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import './Dashboard.css';
 import { useUserData } from './hooks/useUserData';
 import { useFileUpload } from './hooks/useFileUpload';
@@ -19,7 +20,7 @@ function Dashboard({ token, onLogout }) {
     handleDrag,
     handleDrop,
     handleFileChange,
-    clearFile
+    clearFile,
   } = useFileUpload();
 
   const {
@@ -28,7 +29,7 @@ function Dashboard({ token, onLogout }) {
     success,
     outputInfo,
     validateField,
-    processFile
+    processFile,
   } = useFileProcessing(token);
 
   const [kNeighbour, setKNeighbour] = useState('');
@@ -36,22 +37,23 @@ function Dashboard({ token, onLogout }) {
   const [randomState, setRandomState] = useState('');
 
   const handleInputChange = (name, value) => {
-    switch (name) {
-      case 'kNeighbour':
-        setKNeighbour(value);
-        break;
-      case 'targetRatio':
-        setTargetRatio(value);
-        break;
-      case 'randomState':
-        setRandomState(value);
-        break;
-      default:
-        break;
+    const setters = {
+      kNeighbour: setKNeighbour,
+      targetRatio: setTargetRatio,
+      randomState: setRandomState,
+    };
+
+    const setter = setters[name];
+    if (setter) {
+      setter(value);
     }
 
     const errors = validateField(name, value, zipFile);
-    setFieldErrors(prev => ({ ...prev, ...errors, [name]: errors[name] || '' }));
+    setFieldErrors((prev) => ({ 
+      ...prev, 
+      ...errors, 
+      [name]: errors[name] || '',
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -72,7 +74,7 @@ function Dashboard({ token, onLogout }) {
   if (loading) {
     return (
       <div className="dashboard-loading">
-        <div className="spinner"></div>
+        <div className="spinner" />
         <p>Loading...</p>
       </div>
     );
@@ -86,7 +88,7 @@ function Dashboard({ token, onLogout }) {
             <h1>Dashboard</h1>
             <p className="header-subtitle">Manage your data processing tasks</p>
           </div>
-          <button onClick={onLogout} className="logout-btn">
+          <button type="button" onClick={onLogout} className="logout-btn">
             Logout
           </button>
         </div>
@@ -139,13 +141,11 @@ function Dashboard({ token, onLogout }) {
                 >
                   {submitting ? (
                     <>
-                      <span className="spinner-small"></span>
+                      <span className="spinner-small" />
                       Processing...
                     </>
                   ) : (
-                    <>
-                      Process File
-                    </>
+                    <>Process File</>
                   )}
                 </button>
               </div>
@@ -161,5 +161,10 @@ function Dashboard({ token, onLogout }) {
     </div>
   );
 }
+
+Dashboard.propTypes = {
+  token: PropTypes.string.isRequired,
+  onLogout: PropTypes.func.isRequired,
+};
 
 export default Dashboard;
